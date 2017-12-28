@@ -2,6 +2,8 @@
 
 GraphQl for SQL
 
+[![Clojars Project](https://img.shields.io/clojars/v/graphsql.svg)](https://clojars.org/graphsql)
+
 ## Usage
 
 ``` sh
