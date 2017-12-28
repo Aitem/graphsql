@@ -6,9 +6,10 @@
 
   :dependencies [[org.clojure/clojure "1.9.0-alpha16"]
                  [honeysql "0.9.1"]]
+  :source-paths ["src"]
 
-  :source-paths ["src" "test"]
-  :profiles {:dev {:dependencies [[matcho "0.1.0-RC6"]
+  :profiles {:dev {:source-paths ["src" "test"]
+                   :dependencies [[matcho "0.1.0-RC6"]
                                   [clj-pg "0.0.3"]
                                   [ring/ring-defaults "0.2.3"]
                                   [ring "1.5.1"]

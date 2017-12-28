@@ -16,8 +16,8 @@
     (hsql/raw (str res dissoc-q))))
 
 (defn format-query [{:keys [with select collection query without] :as gsql}]
-  (let [columns [:id :resource_type :status :ts :txid
-                 [(query-entry without)   :resource]]
+  (let [columns [:*
+                 #_[(query-entry without)   :resource]]
         columns (if with
                   (reduce-kv (fn [acc as q] (conj acc [(format-query q) as])) columns with)
                   columns)
@@ -34,3 +34,9 @@
                      conditions)
               as]]}
      query)))
+
+
+(defn format [gsql]
+  (->> gsql
+       format-query
+       hsql/format))
