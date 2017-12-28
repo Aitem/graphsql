@@ -21,10 +21,11 @@
   (testing "Simply query"
     (match
      (execute {:select :employee})
-     [{:employee {:id 1}}
-      {:employee {:id 2}}
-      {:employee {:id 3}}
-      {:employee {:id 4}}]))
+     [{:employee {:row {:id 1}}}
+      {:employee {:row {:id 2}}}
+      {:employee {:row {:id 3}}}
+      {:employee {:row {:id 4}}}
+      ]))
 
   (testing "Simply with query"
     (match
@@ -32,15 +33,21 @@
                :with {:dpt {:select :department
                             :where [:= :department.id :employee.department ]}}})
 
-     [{:employee {:id 1}}
-      {:employee {:id 2}}
-      {:employee {:id 3}}
-      {:employee {:id 4}}]))
+     [{:employee {:row {:id 1}
+                  :dpt {:row {:id 1 :name "IT"}}}}
+      {:employee {:row {:id 2}
+                  :dpt {:row {:id 2}}}}
+      {:employee {:row {:id 3}
+                  :dpt {:row {:id 1}}}}
+      {:employee {:row {:id 4}
+                  :dpt {:row {:id 3}}}}
+      ]))
 
   )
 
 (comment
   (f/preload)
+  (execute {:select :employee})
 
   (jdbc/query  f/d ["SELECT true"])
 

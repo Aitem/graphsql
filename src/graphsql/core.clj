@@ -10,28 +10,30 @@
                     name))
          str/join)))
 
-(defn query-entry [without]
-  (let [res  "(resource || jsonb_build_object('id', id , 'resourceType', resource_type))"
+(defn query-entry [select without]
+  (let [res  (str "row_to_json(" (name select) ".*)::jsonb")
         dissoc-q (dissoc-query without)]
-    (hsql/raw (str res dissoc-q))))
+    (hsql/raw (str "(" res dissoc-q ")"))))
 
 (defn format-query [{:keys [with select collection query without] :as gsql}]
-  (let [columns [:*
-                 #_[(query-entry without)   :resource]]
+  (let [without (concat (keys with) without)
+        columns [[(query-entry select without) :row]]
         columns (if with
                   (reduce-kv (fn [acc as q] (conj acc [(format-query q) as])) columns with)
                   columns)
+
         as (-> select name (str "_subselect") keyword)
         as_columns (-> as name (str ".*") keyword)
-        agg (if collection
-              (hsql/call :json_agg (hsql/call :row_to_json as_columns))
-              (hsql/call :row_to_json as_columns))
+        agg (hsql/call :row_to_json as_columns)
+        agg (if collection (hsql/call :json_agg agg) agg)
+
         conditions  (dissoc gsql :select :with :collection :search :without)]
     (merge
      {:select [[agg select]]
-      :from [[(merge {:select columns
-                      :from [select]}
-                     conditions)
+      :from [[(merge
+               {:select columns
+                :from [select]}
+               conditions)
               as]]}
      query)))
 
