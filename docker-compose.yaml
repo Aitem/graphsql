@@ -1,0 +1,11 @@
+version: '2'
+services:
+  db:
+    image: postgres
+    container_name: graphsql-test-db
+    ports:
+      - "5480:5432"
+    environment:
+      POSTGRES_USER: postgres 
+      POSTGRES_DB: graphsql 
+      POSTGRES_PASSWORD: postgres

@@ -1,10 +1,13 @@
-# graphsql
+# GraphSQL
 
-A Clojure library designed to ... well, that part is up to you.
+GraphQl for SQL
 
 ## Usage
 
-FIXME
+``` sh
+docker-compose up -d
+lein test
+```
 
 ## License
 
